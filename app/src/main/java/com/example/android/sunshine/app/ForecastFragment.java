@@ -1,5 +1,6 @@
 package com.example.android.sunshine.app;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -76,6 +78,16 @@ public class ForecastFragment extends Fragment {
         // Get a reference to the ListView, and attach this adapter to it.
         ListView weatherList = (ListView) rootView.findViewById(R.id.listview_forecast);
         weatherList.setAdapter(myForecastAdapter);
+        weatherList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                String forecast = myForecastAdapter.getItem(position);
+            //   Toast.makeText(getActivity(), forecast, Toast.LENGTH_SHORT).show();
+                Intent detailActivityIntent = new Intent(getActivity(), com.example.android.sunshine.app.DetailActivity.class)
+                        .putExtra(Intent.EXTRA_TEXT,forecast);
+                startActivity(detailActivityIntent);
+            }
+        });
 
         return rootView;
     }
@@ -89,7 +101,7 @@ public class ForecastFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
-            (new FetchWeatherTask()).execute("94043");
+            (new FetchWeatherTask()).execute("97217,us");
             return true;
         }
         return super.onOptionsItemSelected(item);
